@@ -2,7 +2,7 @@ const requests = {
     async updateLevelState(curr, lvl) {
         try {
             // update level and xp in database
-            const levelResponse = await fetch(`http://localhost:5000/api/user/updateLevelState/feelssapman/${curr}/${lvl}`, {
+            const levelResponse = await fetch(`https://detox-server.herokuapp.com/api/user/updateLevelState/feelssapman/${curr}/${lvl}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -19,7 +19,7 @@ const requests = {
     },
     async getLevelState(name) {
         try {
-            const response = await fetch(`http://localhost:5000/api/user/getLevelState/${name}`, {
+            const response = await fetch(`https://detox-server.herokuapp.com/api/user/getLevelState/${name}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
@@ -43,7 +43,7 @@ const requests = {
             const taskYear = task.date.toLocaleString("en-US", {"year": "numeric"});
     
             // add task to database
-            const taskResponse = await fetch("http://localhost:5000/api/user/addTask", {
+            const taskResponse = await fetch("https://detox-server.herokuapp.com/api/user/addTask", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -73,7 +73,7 @@ const requests = {
         const day = date.toLocaleString("en-US", {"day": "2-digit"});
     
         try {
-            const response = await fetch(`http://localhost:5000/api/user/getTasksOnDay/feelssapman/${year}/${month}/${day}`, {
+            const response = await fetch(`https://detox-server.herokuapp.com/api/user/getTasksOnDay/feelssapman/${year}/${month}/${day}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
@@ -96,7 +96,7 @@ const requests = {
     
         try {
             // get current month data
-            const response = await fetch(`http://localhost:5000/api/user/getTasksInMonth/${username}/${year}/${month}`, {
+            const response = await fetch(`https://detox-server.herokuapp.com/api/user/getTasksInMonth/${username}/${year}/${month}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
@@ -120,7 +120,7 @@ const requests = {
     
         try {
             // get current month data
-            const response = await fetch(`http://localhost:5000/api/user/getTasksInSurroundingMonths/${username}/${year}/${month}`, {
+            const response = await fetch(`https://detox-server.herokuapp.com/api/user/getTasksInSurroundingMonths/${username}/${year}/${month}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
@@ -140,7 +140,7 @@ const requests = {
     },
     async getProjects(username) {    
         try {
-            const response = await fetch(`http://localhost:5000/api/user/getProjects/${username}`, {
+            const response = await fetch(`https://detox-server.herokuapp.com/api/user/getProjects/${username}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
@@ -172,7 +172,7 @@ const requests = {
         const prevDay = prev.toLocaleString("en-US", {"day": "2-digit"});
     
         try {
-            const response = await fetch(`http://localhost:5000/api/user/getTaskCountInfo/feelssapman/${currYear}/${currMonth}/${currDay}/${prevYear}/${prevMonth}/${prevDay}`, {
+            const response = await fetch(`https://detox-server.herokuapp.com/api/user/getTaskCountInfo/feelssapman/${currYear}/${currMonth}/${currDay}/${prevYear}/${prevMonth}/${prevDay}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
@@ -214,7 +214,7 @@ const requests = {
         const prevDay = prev.toLocaleString("en-US", {"day": "2-digit"});
     
         try {
-            const response = await fetch(`http://localhost:5000/api/user/getAverageXP/feelssapman/${currYear}/${currMonth}/${currDay}/${prevYear}/${prevMonth}/${prevDay}`, {
+            const response = await fetch(`https://detox-server.herokuapp.com/api/user/getAverageXP/feelssapman/${currYear}/${currMonth}/${currDay}/${prevYear}/${prevMonth}/${prevDay}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
@@ -243,7 +243,7 @@ const requests = {
     },
     async getAverageTasks(day) {    
         try {
-            const response = await fetch(`http://localhost:5000/api/user/getAverageTasks/feelssapman/${day}/week`, {
+            const response = await fetch(`https://detox-server.herokuapp.com/api/user/getAverageTasks/feelssapman/${day}/week`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
@@ -272,7 +272,7 @@ const requests = {
     },
     async getTasksInWeek(day) {    
         try {
-            const response = await fetch(`http://localhost:5000/api/user/getTasksInWeek/feelssapman/${day}`, {
+            const response = await fetch(`https://detox-server.herokuapp.com/api/user/getTasksInWeek/feelssapman/${day}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
@@ -322,7 +322,7 @@ const requests = {
     },
     async getDaysToDetox(day) {    
         try {
-            const response = await fetch(`http://localhost:5000/api/user/getDaysToDetox/feelssapman/${day}`, {
+            const response = await fetch(`https://detox-server.herokuapp.com/api/user/getDaysToDetox/feelssapman/${day}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
