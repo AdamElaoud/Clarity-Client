@@ -1,0 +1,35 @@
+#taskList {
+    color: #000000;
+    padding: 0.35rem 0.4rem 0.35rem 0.8rem;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+    height: 55%;
+}
+
+#no-tasks {
+    text-align: center;
+    font-size: 1rem;
+}
+
+ul {
+    padding: 0 0.5rem 0 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow: hidden scroll;
+}
+
+#taskList-title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.bold {
+    font-weight: bold;
+}

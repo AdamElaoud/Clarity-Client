@@ -1,0 +1,17 @@
+body {
+    margin: 0;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: "Manrope", "Trebuchet MS", sans-serif !important;
+}
+
+::-webkit-scrollbar {
+    width: 7px;
+    /* background-color: #DBE3F3; */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #141C3A;
+}

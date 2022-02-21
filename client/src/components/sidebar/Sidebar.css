@@ -1,0 +1,24 @@
+#sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #FFFFFF;
+    color: #828D93;
+    width: 4%;
+    height: 100vh;
+    max-height: 100vh;
+    padding: 1rem;
+}
+
+#sidebar-logo {
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 1rem;
+}
+
+#sidebar-options {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

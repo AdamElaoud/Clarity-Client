@@ -1,0 +1,15 @@
+.dropdown {
+    border: none;
+    background-color: #DCE0E7;
+    border-radius: 0.25rem;
+    width: 3.8rem;
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    font-size: 0.75rem;
+    padding: 0.1rem;
+}
+
+.dropdown:focus {
+    border: none;
+}

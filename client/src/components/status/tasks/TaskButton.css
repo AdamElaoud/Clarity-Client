@@ -1,0 +1,46 @@
+.taskButton {
+    width: 9rem;
+    height: 2.5rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 0.6rem;
+    margin: 0.5rem;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #7150FE;
+    color: #FFFFFF;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+}
+
+.taskButton:hover {
+    cursor: pointer;
+}
+
+.taskButton-title {
+    font-size: 1.1rem;
+    margin-right: 1.3rem;
+    margin-top: -0.15rem;
+}
+
+.taskButton-xp {
+    background: #AE9CFF;
+    position: absolute;
+    right: 0;
+    font-size: 1rem;
+    box-sizing: border-box;
+    width: 1.75rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.taskButton-time {
+    font-size: 0.5rem;
+    font-style: italic;
+    margin-right: 1.3rem;
+}

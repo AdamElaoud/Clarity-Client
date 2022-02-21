@@ -1,0 +1,13 @@
+.sidebarOption {
+    margin: 1rem;
+    border-radius: 0.75rem;
+    font-size: 2rem;
+}
+
+.sidebarOption:hover {
+    cursor: pointer;
+}
+
+#logout {
+    color: #7150FE;
+}

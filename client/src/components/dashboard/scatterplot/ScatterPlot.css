@@ -1,0 +1,17 @@
+#scatter-plot {
+    width: 36.5rem;
+    height: 20rem;
+    margin: 1.25rem;
+    position: relative;
+}
+
+#scatter-plot-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 0.75rem;
+    margin-left: 1rem;
+}
+
+#scatter-plot-chart {
+    height: 85%;
+}
