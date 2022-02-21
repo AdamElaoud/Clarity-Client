@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/simplify-client/static/css/main.4667026e.css",
+    "main.js": "/simplify-client/static/js/main.59766f0a.js",
+    "index.html": "/simplify-client/index.html",
+    "main.4667026e.css.map": "/simplify-client/static/css/main.4667026e.css.map",
+    "main.59766f0a.js.map": "/simplify-client/static/js/main.59766f0a.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4667026e.css",
+    "static/js/main.59766f0a.js"
+  ]
+}
