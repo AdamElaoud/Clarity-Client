@@ -1,0 +1,11 @@
+#statusbar {
+    position: absolute;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #FBFBFB;
+    height: 100vh;
+    width: 22%;
+}

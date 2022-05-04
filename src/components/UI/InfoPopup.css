@@ -1,0 +1,9 @@
+.infopopup {
+    font-weight: bold;
+    color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    width: fit-content;
+}
