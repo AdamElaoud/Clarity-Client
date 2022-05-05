@@ -6,7 +6,7 @@ import SidebarOption from "./SidebarOption";
     props
     -
 */
-export default function Sidebar(props) {
+export default function Sidebar() {
     const navigate = useNavigate();
 
     const logout = () => {
@@ -18,11 +18,11 @@ export default function Sidebar(props) {
         <div id = "sidebar">
             <img id = "sidebar-logo" src = "./logo.jpg" alt = "logo"/>
             <div id = "sidebar-options">
-                <SidebarOption action = {props.logout} icon = "dashboard"/>
-                <SidebarOption action = {props.logout} icon = "checklist"/>
-                <SidebarOption action = {props.logout} icon = "calendar"/>
-                <SidebarOption action = {props.logout} icon = "profile"/>
-                <SidebarOption action = {props.logout} icon = "detox"/>
+                <SidebarOption action = {() => navigate("/dashboard", { replace: true })} icon = "dashboard"/>
+                <SidebarOption action = {() => navigate("/todos", { replace: true })} icon = "todos"/>
+                <SidebarOption action = {() => navigate("/dashboard", { replace: true })} icon = "calendar"/>
+                <SidebarOption action = {() => navigate("/dashboard", { replace: true })} icon = "profile"/>
+                <SidebarOption action = {() => navigate("/dashboard", { replace: true })} icon = "detox"/>
                 <SidebarOption id = "logout" action = {logout} icon = "logout"/>
             </div>
         </div>

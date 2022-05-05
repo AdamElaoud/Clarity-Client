@@ -5,8 +5,12 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import Sidebar from "./components/sidebar/Sidebar";
 import './App.css';
 import Statusbar from "./pages/statusbar/Statusbar";
+import ToDos from "./pages/todos/ToDos";
+import { useSelector } from "react-redux";
+import TaskInputForm from "./components/taskinputform/TaskInputForm";
 
 export default function App() {
+    const showTaskForm = useSelector(state => state.taskForm.showTaskForm);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -27,12 +31,20 @@ export default function App() {
 
     return (
         <main id = "app">
+            {showTaskForm && <TaskInputForm />}
             <Routes>
                 <Route path = "/login" element = { <Login /> }/>
                 <Route path = "/dashboard" element = {
                     <>
                         <Sidebar />
                         <Dashboard /> 
+                        <Statusbar />
+                    </>
+                }/>
+                <Route path = "/todos" element = {
+                    <>
+                        <Sidebar />
+                        <ToDos /> 
                         <Statusbar />
                     </>
                 }/>

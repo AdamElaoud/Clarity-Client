@@ -1,9 +1,12 @@
 import moment from "moment";
-import Slicer from "./slicer";
+import { windowPairParser, windowParser, filterCompleted } from "../../utility/slicer";
 
 const calculator = {
     getTaskCount(window, day, fullTaskList) { // get count of tasks in day|week|month
-        const { curr, prev } = Slicer.windowPairParser(window, day, fullTaskList);
+        let { curr, prev } = windowPairParser(window, day, fullTaskList);
+        curr = filterCompleted(curr, true);
+        prev = filterCompleted(prev, true);
+
 
         const currCount = curr.length;
         const prevCount = prev.length;
@@ -19,7 +22,9 @@ const calculator = {
         };
     },
     getAverageXP(window, day, fullTaskList) { // get average XP in day|week|month
-        const { curr, prev } = Slicer.windowPairParser(window, day, fullTaskList);
+        let { curr, prev } = windowPairParser(window, day, fullTaskList);
+        curr = filterCompleted(curr, true);
+        prev = filterCompleted(prev, true);
 
         // map tasks to array of XP values
         const currXP = curr.map(ele => ele.xp);
@@ -58,7 +63,9 @@ const calculator = {
         };
     },
     getAverageTaskCount(window, day, fullTaskList) { // get average of count of tasks in week|month
-        const { curr, prev } = Slicer.windowPairParser(window, day, fullTaskList);
+        let { curr, prev } = windowPairParser(window, day, fullTaskList);
+        curr = filterCompleted(curr, true);
+        prev = filterCompleted(prev, true);
 
         // calculate window averages
         let currAverage = 0;
@@ -100,7 +107,8 @@ const calculator = {
         };
     },
     getTaskRatios(window, day, fullTaskList) { // get % ratios of task types in day|week|month
-        const tasks = Slicer.windowParser(window, day, fullTaskList);
+        let tasks = windowParser(window, day, fullTaskList);
+        tasks = filterCompleted(tasks, true);
 
         // calculate task ratios
         const taskTotal = tasks.length;
@@ -131,7 +139,8 @@ const calculator = {
         };
     },
     getTaskCountAndXP(day, fullTaskList) { // get line graph data set of tasks and XP per day in week
-        const tasks = Slicer.windowParser("Week", day, fullTaskList);
+        let tasks = windowParser("Week", day, fullTaskList);
+        tasks = filterCompleted(tasks, true);
         
         // get start and end dates for the week
         let start = moment(day);
@@ -174,7 +183,8 @@ const calculator = {
         ];
     },
     getTaskCountPerProject(window, projects, day, fullTaskList) { // get count of tasks per project in day|week|month
-        const tasks = Slicer.windowParser(window, day, fullTaskList);
+        let tasks = windowParser(window, day, fullTaskList);
+        tasks = filterCompleted(tasks, true);
 
         const keys = Object.keys(projects);
 
@@ -205,7 +215,8 @@ const calculator = {
         };
     },
     getTaskCountPerCategory(window, projects, day, fullTaskList) { // get count of tasks per category in day|week|month
-        const tasks = Slicer.windowParser(window, day, fullTaskList);
+        let tasks = windowParser(window, day, fullTaskList);
+        tasks = filterCompleted(tasks, true);
 
         // get categories for state initialization
         let keys = [];
@@ -242,8 +253,9 @@ const calculator = {
     getTaskTimes(day, fullTaskList) { // get scatterplot data set of task times in month
         const currentMonth = moment(day).format("MMMM");
         const data = [];
+        const tasks = filterCompleted(fullTaskList, true);
 
-        fullTaskList.forEach((task) => {
+        tasks.forEach((task) => {
             const date = moment(task.date);
             const dateMonth = date.format("MMMM");
             

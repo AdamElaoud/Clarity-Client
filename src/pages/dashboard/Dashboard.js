@@ -32,12 +32,16 @@ export default function Dashboard() {
 
     // get full taskList
     const prevMonth = moment(day).subtract(1, "month");
+    const nextMonth = moment(day).add(1, "month");
 
     const { data: prevMonthTasks, isLoading: prevIsLoading, isError: prevIsError } = useTasksInMonth(user, prevMonth);
     const { data: currMonthTasks, isLoading: currIsLoading, isError: currIsError } = useTasksInMonth(user, day);
 
-    const dataIsLoading = prevIsLoading || currIsLoading || projectsIsLoading;
-    const dataIsError = prevIsError || currIsError || projectsIsError;
+    // can be optimized to only pull when future data is needed (week has days from next month)
+    const { data: nextMonthTasks, isLoading: nextIsLoading, isError: nextIsError } = useTasksInMonth(user, nextMonth);
+
+    const dataIsLoading = prevIsLoading || currIsLoading || nextIsLoading || projectsIsLoading;
+    const dataIsError = prevIsError || currIsError || nextIsError || projectsIsError;
     
     const [data, setData] = useState({
         fullTaskList: [],
@@ -53,7 +57,7 @@ export default function Dashboard() {
 
     useEffect(() => {
         if (!dataIsLoading && !dataIsError) {
-            const fullTaskList = [...prevMonthTasks, ...currMonthTasks];
+            const fullTaskList = [...prevMonthTasks, ...currMonthTasks, ...nextMonthTasks];
 
             setData({
                 fullTaskList: fullTaskList,
@@ -69,7 +73,7 @@ export default function Dashboard() {
         }
     
         // eslint-disable-next-line 
-    }, [dataIsLoading, dataIsError, prevMonthTasks, currMonthTasks, day]);
+    }, [dataIsLoading, dataIsError, prevMonthTasks, currMonthTasks, nextMonthTasks, day]);
 
     const taskCountWindowChangeHandler = (window) => {
         setData((prevData) => ({

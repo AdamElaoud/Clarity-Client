@@ -1,0 +1,9 @@
+#todos {
+    background-color: #eef3fd;
+    height: 100vh;
+    width: 74%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

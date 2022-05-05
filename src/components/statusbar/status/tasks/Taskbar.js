@@ -1,4 +1,5 @@
 import TaskButton from "./TaskButton";
+import { taskTypes } from "../../../../utility/taskTypes";
 import "./Taskbar.css";
 
 /*
@@ -9,12 +10,12 @@ export default function Taskbar() {
     return (
         <div id = "taskbar">
             <div className = "taskbutton-row">
-                <TaskButton name = "Quick" time = "< 10 min" val = {2} />
-                <TaskButton name = "Average" time = "20 - 60 min" val = {4} />
+                <TaskButton name = {taskTypes.quick.name} time = {taskTypes.quick.time} val = {taskTypes.quick.val} />
+                <TaskButton name = {taskTypes.average.name} time = {taskTypes.average.time} val = {taskTypes.average.val} />
             </div>
             <div className = "taskbutton-row">
-                <TaskButton name = "Large" time = "1 - 2 hours" val = {12} />
-                <TaskButton name = "Major" time = "2+ hours" val = {20} />
+                <TaskButton name = {taskTypes.large.name} time = {taskTypes.large.time} val = {taskTypes.large.val} />
+                <TaskButton name = {taskTypes.major.name} time = {taskTypes.major.time} val = {taskTypes.major.val} />
             </div>
         </div>
     );

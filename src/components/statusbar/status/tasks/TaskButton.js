@@ -1,10 +1,5 @@
-import { Fragment, useState } from "react";
-import TaskInputForm from "./TaskInputForm";
 import "./TaskButton.css";
-import useLevelState from "../../../../hooks/useLevelState";
-import { useSelector } from "react-redux";
-import useUpdateLevelState from "../../../../hooks/useUpdateLevelState";
-import useAddTask from "../../../../hooks/useAddTask";
+import useCreateTask from "../../../../hooks/useCreateTask";
 
 /*
     props
@@ -13,51 +8,12 @@ import useAddTask from "../../../../hooks/useAddTask";
     - val           int | value of XP granted upon completion
 */
 export default function TaskButton(props) {
-    const [inputForm, setInputForm] = useState(null);
-    const user = useSelector(state => state.user.username);
-    const { data: levelState, isLoading, isError } = useLevelState(user);
-    const { mutate: updateLevelState } = useUpdateLevelState();
-    const { mutate: addTask } = useAddTask();
-
-    const openFormHandler = () => {        
-        setInputForm({
-            close: closeFormHandler,
-            submit: addTaskAndXPHandler,
-            title: `${props.name} Task`.toUpperCase(),
-            val: props.val,
-            buttonText: "Submit"
-        });
-    };
-
-    const closeFormHandler = () => {
-        setInputForm(null);
-    };
-
-    // verify issue with inputForm === null
-    const addTaskAndXPHandler = (task) => {
-        if (isLoading || isError) {
-            console.log("cannot submit task, still loading data!");
-            
-        } else {
-            updateLevelState({ user, currentXP: levelState.currentXP, level: levelState.level, edit: task.xp });
-            addTask({ user, task });
-            setInputForm(null);
-        }
-    };
+    const { openTaskForm } = useCreateTask(true, `${props.name} Task`.toUpperCase(), props.val);
 
     // TaskInputForm needs to be portalled to separate root in index.html
     return (
-        <Fragment>
-            {inputForm && 
-            <TaskInputForm 
-                close = {inputForm.close}
-                submit = {inputForm.submit}
-                title = {inputForm.title} 
-                val = {inputForm.val}
-                buttonText = {inputForm.buttonText}
-            />}
-
-            <div className = "taskButton" onClick = {openFormHandler}>
+        <>
+            <div className = "taskButton" onClick = {openTaskForm}>
                 <div className = "taskButton-title">
                     {props.name}
                 </div>
@@ -68,6 +24,6 @@ export default function TaskButton(props) {
                     {props.time}
                 </div>
             </div>
-        </Fragment>
+        </>
     );
 }

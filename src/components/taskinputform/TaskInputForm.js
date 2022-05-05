@@ -5,26 +5,34 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker'
 import { TextField, InputLabel, MenuItem, FormControl, Select } from "@mui/material";
 import moment from "moment";
-import Button from "../../../UI/Button";
+import Button from "../../components/UI/Button";
 import "./TaskInputForm.css";
 import { useDispatch, useSelector } from "react-redux";
-import { dataActions } from "../../../../store/dataSlice";
-import useProjectTree from "../../../../hooks/useProjectTree";
+import { dataActions } from "../../store/dataSlice";
+import useProjectTree from "../../hooks/useProjectTree";
+import { taskFormActions } from "../../store/taskFormSlice";
+import useUpdateLevelState from "../../hooks/useUpdateLevelState";
+import useAddTask from "../../hooks/useAddTask";
+import useLevelState from "../../hooks/useLevelState";
+import { taskTypes } from "../../utility/taskTypes";
 
 /*
     props
-    - close         fun | function to close modal
-    - submit        fun | function to submit & close modal
-    - title         str | title of modal
-    - val           int | xp value for task
-    - buttonText    str | text in close button
+    - 
 */
-export default function TaskInputForm(props) {
+export default function TaskInputForm() {
     const user = useSelector(state => state.user.username);
     const day = useSelector(state => state.data.day);
-    const dispatch = useDispatch();
-    const {data: projects, isLoading, isError } = useProjectTree(user);
+    const title = useSelector(state => state.taskForm.title);
+    const val = useSelector(state => state.taskForm.val);
+    const completeTaskEditor = useSelector(state => state.taskForm.completeTaskEditor);
 
+    const dispatch = useDispatch();
+
+    const { data: projects, isProjectTreeLoading, isProjectTreeError } = useProjectTree(user);
+    const { data: levelState, isLevelStateLoading, isLevelStateError } = useLevelState(user);
+    const { mutate: updateLevelState } = useUpdateLevelState();
+    const { mutate: addTask } = useAddTask();
 
     const [project, setProject] = useState("");
     const [projectMenuItems, setProjectMenuItems] = useState([]);
@@ -33,8 +41,16 @@ export default function TaskInputForm(props) {
     const [description, setDescription] = useState("");
     const [date, setDate] = useState(moment());
 
+    const taskTypeNames = [];
+    for (const type in taskTypes) {
+        const typeName = taskTypes[type].name;
+        taskTypeNames.push(<MenuItem key = {typeName} value = {typeName}>{typeName}</MenuItem>);
+    }
+
+    const [taskType, setTaskType] = useState(taskTypes.quick.name);
+
     useEffect(() => {
-        if (!isLoading && !isError) {
+        if (!isProjectTreeLoading && !isProjectTreeError) {
             const proj = Object.keys(projects)[0];
             setProjectMenuItems(Object.keys(projects).map((ele) => <MenuItem key = {ele} value = {ele}>{ele}</MenuItem>));
             setProject(proj);
@@ -42,29 +58,55 @@ export default function TaskInputForm(props) {
             setCategory(projects[proj][0]);
         }
     
-    }, [isLoading, isError, projects])
+    }, [isProjectTreeLoading, isProjectTreeError, projects])
 
     const submitHandler = (event) => {
         event.preventDefault();
 
-        const task = {
-            _id: require("bson-objectid")(),
-            proj: project,
-            cat: category,
-            desc: description,
-            date: date,
-            xp: props.val,
-            completed: true
-        };
+        let task = {};
+        if (completeTaskEditor) {
+            task = {
+                _id: require("bson-objectid")(),
+                proj: project,
+                cat: category,
+                desc: description,
+                date: date,
+                xp: val,
+                completed: true
+            };
+        } else {
+            task = {
+                _id: require("bson-objectid")(),
+                proj: project,
+                cat: category,
+                desc: description,
+                date: moment(day),
+                xp: taskTypes[taskType.toLowerCase()].val,
+                completed: false
+            };
+        }
 
-        props.submit(task);
+        if (isLevelStateLoading || isLevelStateError) {
+            console.log("cannot submit task, still loading data!");
+            
+        } else {
+            updateLevelState({ user, currentXP: levelState.currentXP, level: levelState.level, edit: task.xp });
+            addTask({ user, task });
 
-        // if current day is different than today, change date
-        const currentDay = day.format("MMMM DD YYYY");
-        const today = moment().format("MMMM DD YYYY");
+            // if current day is different than task date, change date
+            const currentDay = moment(date).format("MMMM DD YYYY");
+            const today = moment().format("MMMM DD YYYY");
 
-        if (currentDay !== today)
-            dispatch(dataActions.changeDay(moment()));
+            if (currentDay !== today)
+                dispatch(dataActions.changeDay(moment(date)));
+
+            // hide modal
+            dispatch(taskFormActions.showTaskForm(false));
+        }
+    };
+
+    const onTaskTypeSelectHandler = (event) => {
+        setTaskType(event.target.value);
     };
 
     const onProjectSelectHandler = (event) => {
@@ -88,20 +130,20 @@ export default function TaskInputForm(props) {
 
     return (
         <LocalizationProvider dateAdapter={AdapterMoment}>
-            <div id = "backdrop" onClick = {props.close}/>
+            <div id = "backdrop" onClick = {() => dispatch(taskFormActions.showTaskForm(false))}/>
             <form onSubmit = {submitHandler} id = "modal">
                 <header id = "modal-header">
                     <div id = "modal-title">
-                        {props.title}
+                        {title}
                     </div>
                     <div id = "modal-xp">
-                        {props.val} XP
+                        {val} XP
                     </div>
                 </header>
 
                 <div id = "modal-center">
                     <div id = "modal-task-data">
-                        <div id = "modal-inputs">
+                        <div className = "modal-section">
                             <div className = "task-info-input">
                                 <FormControl fullWidth>
                                     <InputLabel id = "project-label">Project</InputLabel>
@@ -133,7 +175,8 @@ export default function TaskInputForm(props) {
                             </div>
                         </div>
 
-                        <div id = "modal-time-date">
+                        {completeTaskEditor && 
+                        <div className = "modal-section">
                             <div className = "date-time-input">
                                 <FormControl fullWidth>
                                     <DatePicker
@@ -154,7 +197,25 @@ export default function TaskInputForm(props) {
                                     />
                                 </FormControl>
                             </div>
-                        </div>
+                        </div>}
+
+                        {!completeTaskEditor &&
+                        <div className = "modal-section">
+                            <div className = "task-info-input">
+                                <FormControl fullWidth>
+                                    <InputLabel id = "taskType-label">Task Type</InputLabel>
+                                    <Select
+                                        label = "Task Type"
+                                        labelId = "taskType-label"
+                                        id = "taskType-select"
+                                        value = {taskType}
+                                        onChange = {onTaskTypeSelectHandler}
+                                    >
+                                    {taskTypeNames}
+                                    </Select>
+                                </FormControl>
+                            </div>
+                        </div>}
                     </div>
                     
                     <div id = "task-desc-input">
@@ -171,7 +232,7 @@ export default function TaskInputForm(props) {
                 </div>
 
                 <footer id = "modal-footer">
-                    <Button type = "submit">{props.buttonText}</Button>
+                    <Button type = "submit">Submit</Button>
                 </footer>
             </form>
         </LocalizationProvider>

@@ -1,43 +1,34 @@
 import moment from "moment";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query"
 
-export default function useAddTask() {
+export default function useMarkComplete() {
     const queryClient = useQueryClient();
 
     return useMutation(
         async ({ user, task }) => {
+            console.log(user, task);
+
             try {
-                const day = moment(task.date).format("DD");
-                const month = moment(task.date).format("MMMM");
-                const year = moment(task.date).format("YYYY");
-        
                 // add task to database
-                const taskResponse = await fetch("http://localhost:5001/api/task/addTask", {
-                    method: "POST",
+                const markCompleteResponse = await fetch(`http://localhost:5001/api/task/markComplete/${task._id}`, {
+                    method: "PUT",
                     headers: {
                         "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        username: user,
-                        task: {
-                            ...task,
-                            year: year,
-                            month: month,
-                            day: day
-                        }
-                    })
+                    }
                 });
         
-                // const taskResponseData = await taskResponse.json();
-                // console.log("POST TASK RESPONSE:");
-                // console.log(taskResponseData);
+                // const markCompleteResponseData = await markCompleteResponse.json();
+                // console.log("MARK COMPLETE RESPONSE:");
+                // console.log(markCompleteResponseData);
         
             } catch (err) {
-                console.log(`an error occurred when trying to add tasks to database:\n`, err);
+                console.log(`an error occurred when trying to mark a task complete in database:\n`, err);
             } 
         },
         {
             onMutate: async ({ user, task }) => {
+                console.log(user, task);
+                
                 const month = moment(task.date).format("MMMM");
                 const year = moment(task.date).format("YYYY");
 
@@ -47,8 +38,13 @@ export default function useAddTask() {
                 const prevTasks = queryClient.getQueryData(["tasksInMonth", user, month, year]);
 
                 // if query is cached, optimistically update query data before sending out request
-                if (prevTasks)
-                    queryClient.setQueryData(["tasksInMonth", user, month, year], [...prevTasks, task]);
+                if (prevTasks) {
+                    const taskIndex = prevTasks.findIndex((ele) => ele._id === task._id);
+                    console.log(taskIndex);
+                    prevTasks[taskIndex].completed = true;
+                    console.log(prevTasks);
+                    queryClient.setQueryData(["tasksInMonth", user, month, year], [...prevTasks]);
+                }
 
                 return { prevTasks, user, month, year }; // passed as context to onError and onSettled
             },
@@ -56,16 +52,16 @@ export default function useAddTask() {
                 // if mutation failes, rollback query data to previous level state
                 queryClient.setQueryData(["tasksInMonth", context.user, context.month, context.year], context.prevTasks);
 
-                console.log("useAddTask mutation failed!", error);
+                console.log("useMarkComplete mutation failed!", error);
                 console.log(`attempted to send the following data:`, values);
             },
             onSuccess: (data, values, context) => {
                 // if mutation succeeds, refetch to ensure cache has correct data
                 queryClient.invalidateQueries(["tasksInMonth", context.user, context.month, context.year]);
 
-                console.log("useAddTask mutation succeeded!");
+                console.log("useMarkComplete mutation succeeded!");
                 console.log(`sent with the following data:`);
-                console.log(values)
+                console.log(values);
             }
         }
     );

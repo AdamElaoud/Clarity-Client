@@ -29,7 +29,7 @@ export default function SidebarOption(props) {
         case "logout":
             icon = <FontAwesomeIcon icon = {faSignOutAlt}/>;
             break;
-        case "checklist":
+        case "todos":
                 icon = <FontAwesomeIcon icon = {faListCheck}/>;
                 break
         default:

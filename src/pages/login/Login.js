@@ -9,7 +9,7 @@ import "./Login.css";
 */
 export default function Login() {
     const navigate = useNavigate();
-    const pincode = useSelector(state => state.data.pincode);
+    const pincode = useSelector(state => state.user.pincode);
     const [pins, setPins] = useState([null, null, null, null]);
 
     const pinChangeHandler = (event) => {

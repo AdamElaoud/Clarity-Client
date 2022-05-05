@@ -4,9 +4,8 @@ import moment from "moment";
 const data = createSlice({
     name: "data",
     initialState: {
-        day: moment(), // client
-        daysToDetox: 0, // client
-        pincode: "8753" // client (temporary)
+        day: moment().subtract(3, "weeks").subtract(2, "months"), // client
+        daysToDetox: 0 // client
     },
     reducers: {
         changeDay(state, action) {

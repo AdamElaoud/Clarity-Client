@@ -56,13 +56,7 @@
     width: 100%;
 }
 
-#modal-inputs {
-    display: flex;
-    flex-direction: column;
-    width: 50%
-}
-
-#modal-time-date {
+.modal-section{
     display: flex;
     flex-direction: column;
     width: 50%

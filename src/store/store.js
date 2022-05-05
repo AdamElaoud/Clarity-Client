@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userSlice from "./userSlice";
 import dataSlice from "./dataSlice";
+import taskFormSlice from "./taskFormSlice";
 
 const store = configureStore({
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
@@ -11,7 +12,8 @@ const store = configureStore({
     }),
     reducer: {
         user: userSlice.reducer,
-        data: dataSlice.reducer
+        data: dataSlice.reducer,
+        taskForm: taskFormSlice.reducer
     }
 });
 
