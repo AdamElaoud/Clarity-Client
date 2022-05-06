@@ -6,8 +6,6 @@ export default function useMarkComplete() {
 
     return useMutation(
         async ({ user, task }) => {
-            console.log(user, task);
-
             try {
                 // add task to database
                 const markCompleteResponse = await fetch(`http://localhost:5001/api/task/markComplete/${task._id}`, {
@@ -26,9 +24,7 @@ export default function useMarkComplete() {
             } 
         },
         {
-            onMutate: async ({ user, task }) => {
-                console.log(user, task);
-                
+            onMutate: async ({ user, task }) => {                
                 const month = moment(task.date).format("MMMM");
                 const year = moment(task.date).format("YYYY");
 
@@ -40,9 +36,7 @@ export default function useMarkComplete() {
                 // if query is cached, optimistically update query data before sending out request
                 if (prevTasks) {
                     const taskIndex = prevTasks.findIndex((ele) => ele._id === task._id);
-                    console.log(taskIndex);
                     prevTasks[taskIndex].completed = true;
-                    console.log(prevTasks);
                     queryClient.setQueryData(["tasksInMonth", user, month, year], [...prevTasks]);
                 }
 
@@ -57,6 +51,8 @@ export default function useMarkComplete() {
             },
             onSuccess: (data, values, context) => {
                 // if mutation succeeds, refetch to ensure cache has correct data
+                console.log("useMarkComplete");
+                console.log(context.user, context.month, context.year);
                 queryClient.invalidateQueries(["tasksInMonth", context.user, context.month, context.year]);
 
                 console.log("useMarkComplete mutation succeeded!");

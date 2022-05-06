@@ -1,5 +1,6 @@
 import moment from "moment";
 import { windowPairParser, windowParser, filterCompleted } from "../../utility/slicer";
+import { taskTypes } from "../../utility/taskTypes";
 
 const calculator = {
     getTaskCount(window, day, fullTaskList) { // get count of tasks in day|week|month
@@ -117,11 +118,11 @@ const calculator = {
 
         tasks.forEach((task) => {
             switch (task.xp) {
-                case 2: quickTasks++; break;
-                case 4: averageTasks++; break;
-                case 12: largeTasks++; break;
-                case 20: majorTasks++; break;
-                default: throw new Error("invalid xp amount listed on task!");
+                case taskTypes.quick.val: quickTasks++; break;
+                case taskTypes.average.val: averageTasks++; break;
+                case taskTypes.large.val: largeTasks++; break;
+                case taskTypes.major.val: majorTasks++; break;
+                default: throw new Error(`invalid xp amount listed on task: ${task.xp}`);
             }
         });
 

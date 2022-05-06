@@ -1,3 +1,4 @@
+import useTaskForm from "../../../hooks/useTaskForm";
 import "./TaskItem.css";
 
 /*
@@ -5,13 +6,15 @@ import "./TaskItem.css";
     - task       {} | object containing information about task to be displayed
 */
 export default function TaskItem(props) {
+    const { openTaskForm } = useTaskForm(true, props.task.type, props.task.xp, props.task);
+
     const date = new Date(props.task.date);
     const hours = date.getHours();
     const min = date.getMinutes();
     const minutes = min < 10 ? `0${min}` : min;
 
     return (
-        <li className = "task-item">
+        <li className = "task-item" onClick = {openTaskForm}>
             <div className = "task-xp">
                 {props.task.xp}
             </div>

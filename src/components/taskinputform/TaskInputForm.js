@@ -14,7 +14,8 @@ import { taskFormActions } from "../../store/taskFormSlice";
 import useUpdateLevelState from "../../hooks/useUpdateLevelState";
 import useAddTask from "../../hooks/useAddTask";
 import useLevelState from "../../hooks/useLevelState";
-import { taskTypes } from "../../utility/taskTypes";
+import { taskTypes, taskTypeVals } from "../../utility/taskTypes";
+import useUpdateTask from "../../hooks/useUpdateTask";
 
 /*
     props
@@ -26,6 +27,7 @@ export default function TaskInputForm() {
     const title = useSelector(state => state.taskForm.title);
     const val = useSelector(state => state.taskForm.val);
     const completeTaskEditor = useSelector(state => state.taskForm.completeTaskEditor);
+    const existingTask = useSelector(state => state.taskForm.task);
 
     const dispatch = useDispatch();
 
@@ -33,13 +35,14 @@ export default function TaskInputForm() {
     const { data: levelState, isLevelStateLoading, isLevelStateError } = useLevelState(user);
     const { mutate: updateLevelState } = useUpdateLevelState();
     const { mutate: addTask } = useAddTask();
+    const { mutate: updateTask } = useUpdateTask();
 
     const [project, setProject] = useState("");
     const [projectMenuItems, setProjectMenuItems] = useState([]);
     const [category, setCategory] = useState("");
     const [categoryMenuItems, setCategoryMenuItems] = useState([]);
     const [description, setDescription] = useState("");
-    const [date, setDate] = useState(moment());
+    const [date, setDate] = useState(day);
 
     const taskTypeNames = [];
     for (const type in taskTypes) {
@@ -51,11 +54,22 @@ export default function TaskInputForm() {
 
     useEffect(() => {
         if (!isProjectTreeLoading && !isProjectTreeError) {
-            const proj = Object.keys(projects)[0];
             setProjectMenuItems(Object.keys(projects).map((ele) => <MenuItem key = {ele} value = {ele}>{ele}</MenuItem>));
-            setProject(proj);
-            setCategoryMenuItems(projects[proj].map((ele) => <MenuItem key = {ele} value = {ele}>{ele}</MenuItem>));
-            setCategory(projects[proj][0]);
+
+            // if loading pre-existing task
+            if (existingTask) {
+                setDescription(existingTask.desc);
+                setProject(existingTask.proj);
+                setCategoryMenuItems(projects[existingTask.proj].map((ele) => <MenuItem key = {ele} value = {ele}>{ele}</MenuItem>));
+                setCategory(existingTask.cat);
+                setDate(moment(existingTask.date));
+                
+            } else {
+                const proj = Object.keys(projects)[0];
+                setProject(proj);
+                setCategoryMenuItems(projects[proj].map((ele) => <MenuItem key = {ele} value = {ele}>{ele}</MenuItem>));
+                setCategory(projects[proj][0]);
+            }
         }
     
     }, [isProjectTreeLoading, isProjectTreeError, projects])
@@ -66,22 +80,22 @@ export default function TaskInputForm() {
         let task = {};
         if (completeTaskEditor) {
             task = {
-                _id: require("bson-objectid")(),
                 proj: project,
                 cat: category,
                 desc: description,
                 date: date,
                 xp: val,
+                type: taskTypeVals[val],
                 completed: true
             };
         } else {
             task = {
-                _id: require("bson-objectid")(),
                 proj: project,
                 cat: category,
                 desc: description,
                 date: moment(day),
                 xp: taskTypes[taskType.toLowerCase()].val,
+                type: taskTypeVals[val],
                 completed: false
             };
         }
@@ -90,8 +104,16 @@ export default function TaskInputForm() {
             console.log("cannot submit task, still loading data!");
             
         } else {
-            updateLevelState({ user, currentXP: levelState.currentXP, level: levelState.level, edit: task.xp });
-            addTask({ user, task });
+            // if loading pre-existing task
+            if (existingTask) {
+                task._id = existingTask._id;
+                updateTask({ user, task });
+                
+            } else {
+                task._id = require("bson-objectid")();
+                updateLevelState({ user, currentXP: levelState.currentXP, level: levelState.level, edit: task.xp });
+                addTask({ user, task });
+            }
 
             // if current day is different than task date, change date
             const currentDay = moment(date).format("MMMM DD YYYY");

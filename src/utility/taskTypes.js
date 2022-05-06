@@ -20,3 +20,10 @@ export const taskTypes = {
         val: 30
     }
 }
+
+export const taskTypeVals = {
+    "2": "Quick",
+    "4": "Average",
+    "18": "Large",
+    "30": "Major"
+};

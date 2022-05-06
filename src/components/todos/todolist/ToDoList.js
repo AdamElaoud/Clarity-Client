@@ -7,14 +7,15 @@ import useTasksInMonth from "../../../hooks/useTasksInMonth";
 import { useEffect, useState } from "react";
 import ToDoItem from "./ToDoItem";
 import { getDaySlice, filterCompleted } from "../../../utility/slicer";
-import useCreateTask from "../../../hooks/useCreateTask";
+import useTaskForm from "../../../hooks/useTaskForm";
 import InfoPopup from "../../UI/InfoPopup";
+import { taskTypes } from "../../../utility/taskTypes";
 
 export default function ToDoList() {
     const user = useSelector(state => state.user.username);
     const day = useSelector(state => state.data.day);
 
-    const { openTaskForm } = useCreateTask(false, "TO DO TASK", 2);
+    const { openTaskForm } = useTaskForm(false, "TO DO", taskTypes.quick.val, null);
 
     const { data: currMonthTasks, isLoading: currIsLoading, isError: currIsError } = useTasksInMonth(user, day);
 

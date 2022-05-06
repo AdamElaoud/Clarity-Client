@@ -11,6 +11,11 @@
     width: 100%;
 }
 
+.task-item:hover {
+    cursor: pointer;
+    background: #eceaf6;
+}
+
 .task-xp {
     font-weight: bold;
     font-size: 1.25rem;

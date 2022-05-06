@@ -1,5 +1,5 @@
 import "./TaskButton.css";
-import useCreateTask from "../../../../hooks/useCreateTask";
+import useTaskForm from "../../../../hooks/useTaskForm";
 
 /*
     props
@@ -8,7 +8,7 @@ import useCreateTask from "../../../../hooks/useCreateTask";
     - val           int | value of XP granted upon completion
 */
 export default function TaskButton(props) {
-    const { openTaskForm } = useCreateTask(true, `${props.name} Task`.toUpperCase(), props.val);
+    const { openTaskForm } = useTaskForm(true, `${props.name} Task`.toUpperCase(), props.val, null);
 
     // TaskInputForm needs to be portalled to separate root in index.html
     return (
