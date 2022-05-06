@@ -47,10 +47,10 @@ export default function useUpdateTask() {
 
                 // if query is cached, optimistically update query data before sending out request
                 if (prevTasks) {
-                    const taskIndex = prevTasks.findIndex((ele) => ele._id === task._id);
-                    console.log(task);
-                    prevTasks[taskIndex] = task;
-                    queryClient.setQueryData(["tasksInMonth", user, month, year], [...prevTasks]);
+                    const tempTasks = [...prevTasks];
+                    const taskIndex = tempTasks.findIndex((ele) => ele._id === task._id);
+                    tempTasks[taskIndex] = task;
+                    queryClient.setQueryData(["tasksInMonth", user, month, year], [...tempTasks]);
                 }
 
                 return { prevTasks, user, month, year }; // passed as context to onError and onSettled

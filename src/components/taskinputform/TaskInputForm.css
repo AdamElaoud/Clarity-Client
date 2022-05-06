@@ -75,6 +75,24 @@
     width: 97.5%;
 }
 
+.delete {
+    position: absolute;
+    left: 1rem;
+    padding: 0.25rem 0.75rem;
+    border: 1px solid #fb4a4a;
+    background: #fb4a4a;
+}
+
+.delete:hover, .delete:active {
+    background: #f36969;
+    border-color: #f36969;
+}
+
+.delete:disabled {
+    border: 1px solid #c23030;
+    background: #c23030;
+}
+
 #modal-footer {
     padding: 1rem;
     display: flex;

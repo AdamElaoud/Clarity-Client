@@ -4,6 +4,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker'
 import { TextField, InputLabel, MenuItem, FormControl, Select } from "@mui/material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 import Button from "../../components/UI/Button";
 import "./TaskInputForm.css";
@@ -16,6 +18,7 @@ import useAddTask from "../../hooks/useAddTask";
 import useLevelState from "../../hooks/useLevelState";
 import { taskTypes, taskTypeVals } from "../../utility/taskTypes";
 import useUpdateTask from "../../hooks/useUpdateTask";
+import useDeleteTask from "../../hooks/useDeleteTask";
 
 /*
     props
@@ -36,6 +39,7 @@ export default function TaskInputForm() {
     const { mutate: updateLevelState } = useUpdateLevelState();
     const { mutate: addTask } = useAddTask();
     const { mutate: updateTask } = useUpdateTask();
+    const { mutate: deleteTask } = useDeleteTask();
 
     const [project, setProject] = useState("");
     const [projectMenuItems, setProjectMenuItems] = useState([]);
@@ -162,6 +166,12 @@ export default function TaskInputForm() {
         setDate(moment(newDate));
     };
 
+    const onDeleteHandler = () => {
+        deleteTask({ user, task: existingTask });
+        updateLevelState({ user, currentXP: levelState.currentXP, level: levelState.level, edit: -existingTask.xp });
+        dispatch(taskFormActions.showTaskForm(false));
+    };
+
     return (
         <LocalizationProvider dateAdapter={AdapterMoment}>
             <div id = "backdrop" onClick = {() => dispatch(taskFormActions.showTaskForm(false))}/>
@@ -266,6 +276,7 @@ export default function TaskInputForm() {
                 </div>
 
                 <footer id = "modal-footer">
+                    <Button className = "delete" type = "button" disabled = {!existingTask} onClick = {onDeleteHandler}><FontAwesomeIcon icon = {faTrashCan}/></Button>
                     <Button type = "submit">Submit</Button>
                 </footer>
             </form>
