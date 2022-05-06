@@ -61,7 +61,7 @@ export default function useAddTask() {
             },
             onSuccess: (data, values, context) => {
                 // if mutation succeeds, refetch to ensure cache has correct data
-                console.log("useMarkComplete");
+                console.log("useAddTask");
                 console.log(context.user, context.month, context.year);
                 queryClient.invalidateQueries(["tasksInMonth", context.user, context.month, context.year]);
 

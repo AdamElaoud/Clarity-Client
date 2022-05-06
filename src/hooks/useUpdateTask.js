@@ -6,8 +6,6 @@ export default function useUpdateTask() {
 
     return useMutation(
         async ({ user, task }) => {
-            console.log(task);
-
             try {
                 // add task to database
                 const updateTaskResponse = await fetch(`http://localhost:5001/api/task/updateTask/`, {
@@ -21,7 +19,10 @@ export default function useUpdateTask() {
                             proj: task.proj,
                             cat: task.cat,
                             desc: task.desc,
-                            date: task.date
+                            date: task.date,
+                            xp: task.xp,
+                            type: task.type,
+                            completed: task.completed
                         }
                     })
                 });

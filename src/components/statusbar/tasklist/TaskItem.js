@@ -6,7 +6,13 @@ import "./TaskItem.css";
     - task       {} | object containing information about task to be displayed
 */
 export default function TaskItem(props) {
-    const { openTaskForm } = useTaskForm(true, props.task.type, props.task.xp, props.task);
+    // only open full editor if looking at completed task
+    let taskForm;
+    if (props.task.completed) {
+        taskForm = useTaskForm(true, props.task.type, props.task.xp, props.task);
+    } else {
+        taskForm = useTaskForm(false, props.task.type, props.task.xp, props.task);
+    }
 
     const date = new Date(props.task.date);
     const hours = date.getHours();
@@ -14,7 +20,7 @@ export default function TaskItem(props) {
     const minutes = min < 10 ? `0${min}` : min;
 
     return (
-        <li className = "task-item" onClick = {openTaskForm}>
+        <li className = "task-item" onClick = {taskForm.openTaskForm}>
             <div className = "task-xp">
                 {props.task.xp}
             </div>

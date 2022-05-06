@@ -62,7 +62,11 @@ export default function TaskInputForm() {
                 setProject(existingTask.proj);
                 setCategoryMenuItems(projects[existingTask.proj].map((ele) => <MenuItem key = {ele} value = {ele}>{ele}</MenuItem>));
                 setCategory(existingTask.cat);
-                setDate(moment(existingTask.date));
+                setTaskType(existingTask.type);
+
+                // if viewing a full task (not a to do task)
+                if (completeTaskEditor)
+                    setDate(moment(existingTask.date));
                 
             } else {
                 const proj = Object.keys(projects)[0];
@@ -93,11 +97,16 @@ export default function TaskInputForm() {
                 proj: project,
                 cat: category,
                 desc: description,
-                date: moment(day),
                 xp: taskTypes[taskType.toLowerCase()].val,
-                type: taskTypeVals[val],
+                type: taskType,
                 completed: false
             };
+
+            // if loading pre-existing task
+            if (existingTask)
+                task.date = date;
+            else
+                task.date = moment(day);
         }
 
         if (isLevelStateLoading || isLevelStateError) {
@@ -111,8 +120,11 @@ export default function TaskInputForm() {
                 
             } else {
                 task._id = require("bson-objectid")();
-                updateLevelState({ user, currentXP: levelState.currentXP, level: levelState.level, edit: task.xp });
                 addTask({ user, task });
+
+                // if viewing a full task
+                if (completeTaskEditor)
+                    updateLevelState({ user, currentXP: levelState.currentXP, level: levelState.level, edit: task.xp });
             }
 
             // if current day is different than task date, change date
