@@ -22,7 +22,8 @@ export default function useUpdateTask() {
                             date: task.date,
                             xp: task.xp,
                             type: task.type,
-                            completed: task.completed
+                            completed: task.completed,
+                            matrix: task.matrix
                         }
                     })
                 });

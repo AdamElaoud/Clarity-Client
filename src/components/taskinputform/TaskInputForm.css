@@ -89,8 +89,8 @@
 }
 
 .delete:disabled {
-    border: 1px solid #c23030;
-    background: #c23030;
+    border: 1px solid #5c5959;
+    background: #5c5959;
 }
 
 #modal-footer {

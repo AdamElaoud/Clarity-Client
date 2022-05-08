@@ -6,8 +6,14 @@ import "./ToDos.css";
 export default function ToDos() {
     return (
         <div id = "todos">
-            <TaskMatrix />
-            <ToDoList />
+            <div id = "todos-title">
+                To Dos
+            </div>
+            <div id = "todo-data">
+                <TaskMatrix />
+                <ToDoList />
+            </div>
+
             <WeekView />
         </div>
     );

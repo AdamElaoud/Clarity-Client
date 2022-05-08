@@ -16,7 +16,7 @@ import { taskFormActions } from "../../store/taskFormSlice";
 import useUpdateLevelState from "../../hooks/useUpdateLevelState";
 import useAddTask from "../../hooks/useAddTask";
 import useLevelState from "../../hooks/useLevelState";
-import { taskTypes, taskTypeVals } from "../../utility/taskTypes";
+import { matrixTypeLabels, matrixTypes, taskTypes, taskTypeVals } from "../../utility/taskTypes";
 import useUpdateTask from "../../hooks/useUpdateTask";
 import useDeleteTask from "../../hooks/useDeleteTask";
 
@@ -34,7 +34,7 @@ export default function TaskInputForm() {
 
     const dispatch = useDispatch();
 
-    const { data: projects, isProjectTreeLoading, isProjectTreeError } = useProjectTree(user);
+    const { data: projects, isLoading: isProjectTreeLoading, isError: isProjectTreeError } = useProjectTree(user);
     const { data: levelState, isLevelStateLoading, isLevelStateError } = useLevelState(user);
     const { mutate: updateLevelState } = useUpdateLevelState();
     const { mutate: addTask } = useAddTask();
@@ -56,6 +56,14 @@ export default function TaskInputForm() {
 
     const [taskType, setTaskType] = useState(taskTypes.quick.name);
 
+    const matrixTypeNames = [];
+    for (const type in matrixTypes) {
+        const typeName = matrixTypes[type].name;
+        matrixTypeNames.push(<MenuItem key = {typeName} value = {typeName}>{typeName}</MenuItem>);
+    }
+
+    const [matrixType, setMatrixType] = useState(matrixTypes.urgentimportant.name);
+
     useEffect(() => {
         if (!isProjectTreeLoading && !isProjectTreeError) {
             setProjectMenuItems(Object.keys(projects).map((ele) => <MenuItem key = {ele} value = {ele}>{ele}</MenuItem>));
@@ -67,6 +75,7 @@ export default function TaskInputForm() {
                 setCategoryMenuItems(projects[existingTask.proj].map((ele) => <MenuItem key = {ele} value = {ele}>{ele}</MenuItem>));
                 setCategory(existingTask.cat);
                 setTaskType(existingTask.type);
+                setMatrixType(matrixTypes[matrixTypeLabels[existingTask.matrix]].name);
 
                 // if viewing a full task (not a to do task)
                 if (completeTaskEditor)
@@ -85,38 +94,40 @@ export default function TaskInputForm() {
     const submitHandler = (event) => {
         event.preventDefault();
 
-        let task = {};
-        if (completeTaskEditor) {
-            task = {
-                proj: project,
-                cat: category,
-                desc: description,
-                date: date,
-                xp: val,
-                type: taskTypeVals[val],
-                completed: true
-            };
-        } else {
-            task = {
-                proj: project,
-                cat: category,
-                desc: description,
-                xp: taskTypes[taskType.toLowerCase()].val,
-                type: taskType,
-                completed: false
-            };
-
-            // if loading pre-existing task
-            if (existingTask)
-                task.date = date;
-            else
-                task.date = moment(day);
-        }
-
         if (isLevelStateLoading || isLevelStateError) {
             console.log("cannot submit task, still loading data!");
             
         } else {
+            let task = {};
+            if (completeTaskEditor) {
+                task = {
+                    proj: project,
+                    cat: category,
+                    desc: description,
+                    date: date,
+                    xp: val,
+                    type: taskTypeVals[val],
+                    completed: true,
+                    matrix: matrixTypes.urgentimportant.label
+                };
+            } else {
+                task = {
+                    proj: project,
+                    cat: category,
+                    desc: description,
+                    xp: taskTypes[taskType.toLowerCase()].val,
+                    type: taskType,
+                    completed: false,
+                    matrix: matrixTypes[matrixType.replaceAll(" ", "").replaceAll("&", "").toLowerCase()].label
+                };
+
+                // if loading pre-existing task
+                if (existingTask)
+                    task.date = date;
+                else
+                    task.date = moment();
+            }
+
             // if loading pre-existing task
             if (existingTask) {
                 task._id = existingTask._id;
@@ -146,6 +157,10 @@ export default function TaskInputForm() {
     const onTaskTypeSelectHandler = (event) => {
         setTaskType(event.target.value);
     };
+    
+    const onMatrixTypeSelectHandler = (event) => {
+        setMatrixType(event.target.value);
+    };
 
     const onProjectSelectHandler = (event) => {
         const proj = event.target.value;
@@ -168,7 +183,10 @@ export default function TaskInputForm() {
 
     const onDeleteHandler = () => {
         deleteTask({ user, task: existingTask });
-        updateLevelState({ user, currentXP: levelState.currentXP, level: levelState.level, edit: -existingTask.xp });
+
+        if (completeTaskEditor)
+            updateLevelState({ user, currentXP: levelState.currentXP, level: levelState.level, edit: -existingTask.xp });
+        
         dispatch(taskFormActions.showTaskForm(false));
     };
 
@@ -231,6 +249,7 @@ export default function TaskInputForm() {
                                     />
                                 </FormControl>
                             </div>
+
                             <div className = "date-time-input">
                                 <FormControl fullWidth>
                                     <TimePicker
@@ -256,6 +275,21 @@ export default function TaskInputForm() {
                                         onChange = {onTaskTypeSelectHandler}
                                     >
                                     {taskTypeNames}
+                                    </Select>
+                                </FormControl>
+                            </div>
+
+                            <div className = "task-info-input">
+                                <FormControl fullWidth>
+                                    <InputLabel id = "matrixType-label">Matrix Type</InputLabel>
+                                    <Select
+                                        label = "Matrix Type"
+                                        labelId = "matrixType-label"
+                                        id = "matrixType-select"
+                                        value = {matrixType}
+                                        onChange = {onMatrixTypeSelectHandler}
+                                    >
+                                    {matrixTypeNames}
                                     </Select>
                                 </FormControl>
                             </div>

@@ -1,0 +1,65 @@
+.matrixquadrant {
+    position: relative;
+    background: #eef3fd;
+    padding: 0.25rem 0.35rem 0.25rem 0.35rem;
+}
+
+.quadrant-list {
+    height: 100%;
+    padding-right: 0.5rem;
+    overflow: hidden scroll;
+}
+
+.top-left-border {
+    border-top-left-radius: 0.7rem;
+}
+
+.top-right-border {
+    border-top-right-radius: 0.7rem;
+}
+
+.bottom-left-border {
+    border-bottom-left-radius: 0.7rem;
+}
+
+.bottom-right-border {
+    border-bottom-right-radius: 0.7rem;
+}
+
+.quadrant-top {
+    position: absolute;
+    top: -2.25rem;
+    left: 0.25rem;
+    font-weight: bold;
+    font-size: 1.15rem;
+}
+
+.quadrant-left {
+    position: absolute;
+    left: -2.25rem;
+    writing-mode: vertical-lr;
+    transform:scale(-1);
+    font-weight: bold;
+    font-size: 1.15rem;
+}
+
+.quadrant-items {
+    list-style: none;
+    padding: 0;
+}
+
+.green {
+    background: #b2e428;
+}
+
+.blue {
+    background: #44a7ee;
+}
+
+.yellow {
+    background: #ffbd22;
+}
+
+.red {
+    background: #d61b1b;
+}

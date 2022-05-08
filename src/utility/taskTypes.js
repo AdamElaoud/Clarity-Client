@@ -27,3 +27,29 @@ export const taskTypeVals = {
     "18": "Large",
     "30": "Major"
 };
+
+export const matrixTypes = {
+    urgentimportant: {
+        name: "Urgent & Important",
+        label: "ui"
+    },
+    noturgentimportant: {
+        name: "Not Urgent & Important",
+        label: "nui"
+    },
+    urgentnotimportant: {
+        name: "Urgent & Not Important",
+        label: "uni"
+    },
+    noturgentnotimportant: {
+        name: "Not Urgent & Not Important",
+        label: "nuni"
+    }
+}
+
+export const matrixTypeLabels = {
+    "ui": "urgentimportant",
+    "nui": "noturgentimportant",
+    "uni": "urgentnotimportant",
+    "nuni": "noturgentnotimportant"
+}

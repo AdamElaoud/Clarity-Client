@@ -19,7 +19,7 @@ export default function App() {
 
         if (loginStatus === "true") {
             // route to dashboard
-            navigate("/dashboard", { replace: true });
+            navigate("/todos", { replace: true });
             
         } else {
             // route to login page

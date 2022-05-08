@@ -118,6 +118,12 @@ export function filterCompleted(tasks, completed) {
     return filteredTasks;
 }
 
+export function filterMatrixTypes(tasks, type) {
+    const filteredTasks = tasks.filter(task => task.matrix === type);
+
+    return filteredTasks;
+}
+
 export function windowParser(window, day, fullTaskList) {
     let tasks;
 

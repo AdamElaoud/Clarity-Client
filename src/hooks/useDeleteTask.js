@@ -21,7 +21,7 @@ export default function useDeleteTask() {
                 // console.log(deleteTaskResponseData);
         
             } catch (err) {
-                console.log(`an error occurred when trying to add tasks to database:\n`, err);
+                console.log(`an error occurred when trying to delete tasks from database:\n`, err);
             } 
         },
         {

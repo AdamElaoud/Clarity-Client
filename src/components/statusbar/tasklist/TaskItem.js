@@ -4,15 +4,15 @@ import "./TaskItem.css";
 /*
     props
     - task       {} | object containing information about task to be displayed
+    - className str | additional classNames to apply to the taskitem
 */
 export default function TaskItem(props) {
     // only open full editor if looking at completed task
     let taskForm;
-    if (props.task.completed) {
+    if (props.task.completed)
         taskForm = useTaskForm(true, props.task.type, props.task.xp, props.task);
-    } else {
+    else
         taskForm = useTaskForm(false, props.task.type, props.task.xp, props.task);
-    }
 
     const date = new Date(props.task.date);
     const hours = date.getHours();
@@ -20,7 +20,7 @@ export default function TaskItem(props) {
     const minutes = min < 10 ? `0${min}` : min;
 
     return (
-        <li className = "task-item" onClick = {taskForm.openTaskForm}>
+        <li className = {`task-item ${props.className}`} onClick = {taskForm.openTaskForm}>
             <div className = "task-xp">
                 {props.task.xp}
             </div>

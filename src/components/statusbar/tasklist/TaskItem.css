@@ -47,7 +47,7 @@
 
 .task-category {
     font-size: 0.6rem;
-    color: #b6b5b9;
+    color: #a6a5a8;
     margin-left: 0.25rem;
     margin-top: 0.1rem;
 }
@@ -65,4 +65,36 @@
     padding: 0.25rem;
     position: absolute;
     right: 0.5rem;
+}
+
+.task-item-green {
+    background: #cff860;
+}
+
+.task-item-blue {
+    background: #69befa;
+}
+
+.task-item-yellow {
+    background: #fecf61;
+}
+
+.task-item-red {
+    background: #f94646;
+}
+
+.task-item-blue .task-time,
+.task-item-blue .task-category,
+.task-item-green .task-time,
+.task-item-green .task-category,
+.task-item-yellow .task-time,
+.task-item-yellow .task-category {
+    color: #000000;
+}
+
+.task-item-red .task-time,
+.task-item-red .task-project,
+.task-item-red .task-category,
+.task-item-red .task-description {
+    color: #FFFFFF;
 }

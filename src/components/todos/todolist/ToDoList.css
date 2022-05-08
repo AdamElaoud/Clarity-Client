@@ -1,6 +1,6 @@
 #todolist {
-    height: 50rem;
-    width: 33%;
+    height: 100%;
+    width: 35%;
 }
 
 #todolist-header {
@@ -15,4 +15,8 @@
 
 #todo-items {
     list-style: none;
+    padding: 0;
+    height: 85%;
+    overflow: hidden scroll;
+    padding-right: 0.5rem;
 }

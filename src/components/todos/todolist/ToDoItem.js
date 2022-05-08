@@ -1,3 +1,4 @@
+import moment from "moment";
 import { useSelector } from "react-redux";
 import useLevelState from "../../../hooks/useLevelState";
 import useUpdateLevelState from "../../../hooks/useUpdateLevelState";
@@ -9,6 +10,7 @@ import "./ToDoItem.css";
 /*
     props
     - task       {} | object containing information about task to be displayed
+    - className str | additional classNames to be applied to the todoitem
 */
 export default function ToDoItem(props) {
     const user = useSelector(state => state.user.username);
@@ -23,6 +25,7 @@ export default function ToDoItem(props) {
         // if checked, mark task as complete
         } else if (event.target.checked) {
             props.task.completed = true;
+            props.task.date = moment();
             updateTask({ user, task: props.task });
             updateLevelState({ user, currentXP: levelState.currentXP, level: levelState.level, edit: props.task.xp });
         }
@@ -31,7 +34,7 @@ export default function ToDoItem(props) {
     return (
         <div className = "todo-item">
             <CheckInput onClick = {onClickHandler}/>
-            <TaskItem task = {props.task}/>
+            <TaskItem className = {props.className} task = {props.task}/>
         </div>
     );
 }

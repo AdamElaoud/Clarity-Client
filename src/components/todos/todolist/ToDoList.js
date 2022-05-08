@@ -17,45 +17,51 @@ export default function ToDoList() {
 
     const { openTaskForm } = useTaskForm(false, "TO DO", taskTypes.quick.val, null);
 
-    const { data: currMonthTasks, isLoading: currIsLoading, isError: currIsError } = useTasksInMonth(user, day);
-
-    // can be optimized to only pull when future data is needed (week has days from next month)
-    const nextMonth = moment(day).add(1, "month");
-    const { data: nextMonthTasks, isLoading: nextIsLoading, isError: nextIsError } = useTasksInMonth(user, nextMonth);
-
-    const dataIsLoading = currIsLoading || nextIsLoading;
-    const dataIsError = currIsError || nextIsError;
+    const { data: currMonthTasks, isLoading, isError } = useTasksInMonth(user, day);
     
-    const [data, setData] = useState({
-        fullTaskList: [],
-        dayTaskList: []
-    });
+    const [dayTaskList, setDayTaskList] = useState([]);
 
     useEffect(() => {
-        if (!dataIsLoading && !dataIsError) {
-            const fullTaskList = [...currMonthTasks, ...nextMonthTasks];
-
-            setData({
-                fullTaskList: fullTaskList,
-                dayTaskList: filterCompleted(getDaySlice(day, fullTaskList), false)
-            });
+        if (!isLoading && !isError) {
+            setDayTaskList(filterCompleted(getDaySlice(day, currMonthTasks), false));
         }
     
-    }, [dataIsLoading, dataIsError, currMonthTasks, nextMonthTasks, day]);
+    }, [isLoading, isError, currMonthTasks, day]);
 
     let display;
-    if (dataIsLoading) {
+    if (isLoading) {
         display = (
             <InfoPopup text = "loading"/>
         );
-    } else if (dataIsError) {
+    } else if (isError) {
         display = (
             <InfoPopup text = "error!"/>
         );
     } else {
         display = (
             <ul id = "todo-items">
-                {data.dayTaskList.map(task => <ToDoItem key = {task.key} task = {task}/>)}
+                {dayTaskList.map(task => {
+                        let color;
+                        switch (task.matrix) {
+                            case "ui":
+                                color = "task-item-green";
+                                break;
+                            case "nui":
+                                color = "task-item-blue";
+                                break;
+                            case "uni":
+                                color = "task-item-yellow";
+                                break;
+                            case "nuni":
+                                color = "task-item-red";
+                                break;
+                            default:
+                                throw new Error("invalid matrix type!");
+                        }
+
+                        return <ToDoItem className = {color} key = {task.key} task = {task}/>
+                    })
+                }
             </ul>
         );
     }

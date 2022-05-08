@@ -1,0 +1,10 @@
+#taskmatrix {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 0.5rem;
+    height: 100%;
+    width: 57%;
+    background: #000000;
+    border-radius: 0.8rem;
+}
