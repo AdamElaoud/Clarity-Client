@@ -18,8 +18,13 @@ export default function ProgressBar() {
     const { data: levelState, isLoading, isError } = useLevelState(user);
 
     useEffect(() => {
-        if (!isLoading && !isError)
-            setMaxXP(LevelCurve[levelState.level]);
+        if (!isLoading && !isError) {
+            // if xp cap is reached, set maxXP to 60
+            if (levelState.level === LevelCurve[0])
+                setMaxXP(LevelCurve[LevelCurve.length - 1]) ;
+            else
+                setMaxXP(LevelCurve[levelState.level]);
+        }
 
     }, [isLoading, isError, levelState])
 
