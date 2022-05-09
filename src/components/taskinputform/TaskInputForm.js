@@ -125,7 +125,7 @@ export default function TaskInputForm() {
                 if (existingTask)
                     task.date = date;
                 else
-                    task.date = moment();
+                    task.date = moment(day);
             }
 
             // if loading pre-existing task

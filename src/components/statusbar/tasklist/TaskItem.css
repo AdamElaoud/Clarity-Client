@@ -16,6 +16,10 @@
     background: #eceaf6;
 }
 
+.task-item:hover .task-data {
+    
+}
+
 .task-xp {
     font-weight: bold;
     font-size: 1.25rem;
