@@ -1,8 +1,11 @@
 import { useMutation, useQueryClient } from "react-query";
+import { useSelector } from "react-redux";
 import LevelCurve from "../utility/levelCurve";
 
 export default function useUpdateLevelState() {
+    const devmode = useSelector(state => state.data.devmode);
     const queryClient = useQueryClient();
+    const url = devmode ? "http://localhost:5001" : "https://detox-server.herokuapp.com"
 
     return useMutation(
         async ({ user, currentXP, level, edit }) => {
@@ -37,7 +40,7 @@ export default function useUpdateLevelState() {
 
             try {
                 // update level and xp in database
-                const levelResponse = await fetch(`http://localhost:5001/api/user/updateLevelState/${user}/${currentXP}/${level}`, {
+                const levelResponse = await fetch(`${url}/api/user/updateLevelState/${user}/${currentXP}/${level}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"

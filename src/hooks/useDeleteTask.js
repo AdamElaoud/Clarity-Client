@@ -1,14 +1,17 @@
 import moment from "moment";
 import { useMutation, useQueryClient } from "react-query";
+import { useSelector } from "react-redux";
 
 export default function useDeleteTask() {
+    const devmode = useSelector(state => state.data.devmode);
     const queryClient = useQueryClient();
+    const url = devmode ? "http://localhost:5001" : "https://detox-server.herokuapp.com"
 
     return useMutation(
         async ({ user, task }) => {
             try {        
                 // add task to database
-                const deleteTaskResponse = await fetch("http://localhost:5001/api/task/deleteTask", {
+                const deleteTaskResponse = await fetch(`${url}/api/task/deleteTask`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"

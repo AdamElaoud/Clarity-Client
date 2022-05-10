@@ -1,9 +1,13 @@
 import { useQuery } from "react-query";
+import { useSelector } from "react-redux";
 
 export default function useLevelState(user) {
+    const devmode = useSelector(state => state.data.devmode);
+    const url = devmode ? "http://localhost:5001" : "https://detox-server.herokuapp.com"
+
     return useQuery(["levelState", user], async () => {
         try {
-            const response = await fetch(`http://localhost:5001/api/user/getLevelState/${user}`, {
+            const response = await fetch(`${url}/api/user/getLevelState/${user}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"

@@ -1,14 +1,17 @@
 import moment from "moment";
 import { useMutation, useQueryClient } from "react-query"
+import { useSelector } from "react-redux";
 
 export default function useUpdateTask() {
+    const devmode = useSelector(state => state.data.devmode);
     const queryClient = useQueryClient();
+    const url = devmode ? "http://localhost:5001" : "https://detox-server.herokuapp.com"
 
     return useMutation(
         async ({ user, task }) => {
             try {
                 // add task to database
-                const updateTaskResponse = await fetch(`http://localhost:5001/api/task/updateTask/`, {
+                const updateTaskResponse = await fetch(`${url}/api/task/updateTask/`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json"

@@ -1,9 +1,13 @@
 import { useQuery } from "react-query";
+import { useSelector } from "react-redux";
 
 export default function useProjectTree(user) {
+    const devmode = useSelector(state => state.data.devmode);
+    const url = devmode ? "http://localhost:5001" : "https://detox-server.herokuapp.com"
+
     return useQuery(["projectTree", user], async () => {
         try {
-            const response = await fetch(`http://localhost:5001/api/user/getProjectTree/${user}`, {
+            const response = await fetch(`${url}/api/user/getProjectTree/${user}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"

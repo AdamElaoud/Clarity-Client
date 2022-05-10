@@ -1,8 +1,11 @@
 import moment from "moment";
 import { useMutation, useQueryClient } from "react-query";
+import { useSelector } from "react-redux";
 
 export default function useAddTask() {
+    const devmode = useSelector(state => state.data.devmode);
     const queryClient = useQueryClient();
+    const url = devmode ? "http://localhost:5001" : "https://detox-server.herokuapp.com"
 
     return useMutation(
         async ({ user, task }) => {
@@ -12,7 +15,7 @@ export default function useAddTask() {
                 const year = moment(task.date).format("YYYY");
         
                 // add task to database
-                const taskResponse = await fetch("http://localhost:5001/api/task/addTask", {
+                const taskResponse = await fetch(`${url}/api/task/addTask`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
